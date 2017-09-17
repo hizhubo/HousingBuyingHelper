@@ -25,6 +25,38 @@ namespace WebScraper
 
         private void ScrapeWebElement(IWebElement webElement, Selector selector)
         {
+            try
+            {
+                webElement = this.FindWebElement(webElement, selector);
+            }
+            catch (NoSuchElementException)
+            {
+                selector.Value = "N/A";
+
+                return;
+            }
+
+            if (!string.IsNullOrWhiteSpace(selector.Name))
+            {
+                selector.Value = webElement.Text;
+            }
+
+            if (!string.IsNullOrWhiteSpace(selector.Regex))
+            {
+                selector.Value = new Regex(selector.Regex).Match(selector.Value).Groups["Value"].Value;
+            }
+
+            if (selector.SubSelectors != null && selector.SubSelectors.Length > 0)
+            {
+                foreach (var subSelector in selector.SubSelectors)
+                {
+                    this.ScrapeWebElement(webElement, subSelector);
+                }
+            }
+        }
+
+        private IWebElement FindWebElement(IWebElement webElement, Selector selector)
+        {
             switch (selector.Type)
             {
                 case SelectorType.ClassName:
@@ -53,20 +85,7 @@ namespace WebScraper
                     break;
             }
 
-            selector.Value = webElement.Text;
-
-            if (!string.IsNullOrWhiteSpace(selector.Regex))
-            {
-                selector.Value = new Regex(selector.Regex).Match(selector.Value).Groups["Value"].Value;
-            }
-
-            if (selector.SubSelectors != null && selector.SubSelectors.Length > 0)
-            {
-                foreach (var subSelector in selector.SubSelectors)
-                {
-                    this.ScrapeWebElement(webElement, subSelector);
-                }
-            }
+            return webElement;
         }
     }
 }

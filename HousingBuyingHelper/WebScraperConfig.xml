@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfSelector xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Selector>
+    <Name>StreetAddress</Name>
+    <Expression>street-address</Expression>
+    <Type>ClassName</Type>
+  </Selector>
+  <Selector>
+    <Type>ClassName</Type>
+    <Expression>keyDetailsList</Expression>
+    <SubSelectors>
+      <Selector>
+        <Name>PropertyType</Name>
+        <Expression>//span[preceding-sibling::span[text()="Property Type"]]</Expression>
+        <Type>XPath</Type>
+      </Selector>
+      <Selector>
+        <Name>City</Name>
+        <Expression>//span[preceding-sibling::span[text()="Community"]]</Expression>
+        <Type>XPath</Type>
+      </Selector>
+      <Selector>
+        <Name>County</Name>
+        <Expression>//span[preceding-sibling::span[text()="County"]]</Expression>
+        <Type>XPath</Type>
+      </Selector>
+      <Selector>
+        <Name>MlsNo</Name>
+        <Expression>//span[preceding-sibling::span[text()="MLS#"]]</Expression>
+        <Type>XPath</Type>
+      </Selector>
+      <Selector>
+        <Name>LotSize</Name>
+        <Expression>//span[preceding-sibling::span[text()="Lot Size"]]</Expression>
+        <Type>XPath</Type>
+        <Regex>(?&lt;Value&gt;.*?) square feet</Regex>
+      </Selector>
+    </SubSelectors>
+  </Selector>
+  <Selector>
+    <Name>Status</Name>
+    <Expression>//span[preceding-sibling::span[text()="Status: "]]</Expression>
+    <Type>XPath</Type>
+  </Selector>
+  <Selector>
+    <Name>Listed Price</Name>
+    <Expression>span[itemprop='price']</Expression>
+    <Type>CssSelector</Type>
+  </Selector>
+  <Selector>
+    <Name>Redfin Estimated Price</Name>
+    <Expression>span[data-rf-test-id='avmLdpPrice'] span.value</Expression>
+    <Type>CssSelector</Type>
+    <Regex>\$(?&lt;Value&gt;.*)</Regex>
+  </Selector>
+  <Selector>
+    <Type>ClassName</Type>
+    <Expression>MortgageCalculator</Expression>
+    <SubSelectors>
+      <Selector>
+        <Name>PaymentPerMonth</Name>
+        <Expression>div.major-part div.title</Expression>
+        <Type>CssSelector</Type>
+        <Regex>\$(?&lt;Value&gt;.*?) per month</Regex>
+      </Selector>
+      <Selector>
+        <Name>PrincipalAndInterest</Name>
+        <Expression>//span[preceding-sibling::div[.//span[text()="Principal and Interest"]]]</Expression>
+        <Type>XPath</Type>
+        <Regex>\$(?&lt;Value&gt;.*)</Regex>
+      </Selector>
+      <Selector>
+        <Name>PropertyTaxes</Name>
+        <Expression>//span[preceding-sibling::div[.//span[text()="Property Taxes"]]]</Expression>
+        <Type>XPath</Type>
+        <Regex>\$(?&lt;Value&gt;.*)</Regex>
+      </Selector>
+      <Selector>
+        <Name>HoaDues</Name>
+        <Expression>//span[preceding-sibling::div[.//span[text()="HOA Dues"]]]</Expression>
+        <Type>XPath</Type>
+        <Regex>\$(?&lt;Value&gt;.*)</Regex>
+      </Selector>
+      <Selector>
+        <Name>HomeownersInsurance</Name>
+        <Expression>//span[preceding-sibling::div[.//span[text()="Homeowners' Insurance"]]]</Expression>
+        <Type>XPath</Type>
+        <Regex>\$(?&lt;Value&gt;.*)</Regex>
+      </Selector>
+    </SubSelectors>
+  </Selector>
+  <Selector>
+    <Type>ClassName</Type>
+    <Expression>basic-info</Expression>
+    <SubSelectors>
+      <Selector>
+        <Name>Beds</Name>
+        <Expression>//div[preceding-sibling::span[text()="Beds"]]</Expression>
+        <Type>XPath</Type>
+      </Selector>
+      <Selector>
+        <Name>Baths</Name>
+        <Expression>//div[preceding-sibling::span[text()="Baths"]]</Expression>
+        <Type>XPath</Type>
+      </Selector>
+      <Selector>
+        <Name>FinishedSqFt</Name>
+        <Expression>//div[preceding-sibling::span[text()="Finished Sq. Ft."]]</Expression>
+        <Type>XPath</Type>
+      </Selector>
+      <Selector>
+        <Name>YearBuilt</Name>
+        <Expression>//div[preceding-sibling::span[text()="Year Built"]]</Expression>
+        <Type>XPath</Type>
+      </Selector>
+      <Selector>
+        <Name>YearRenovated</Name>
+        <Expression>//div[preceding-sibling::span[text()="Year Renovated"]]</Expression>
+        <Type>XPath</Type>
+      </Selector>
+      <Selector>
+        <Name>Floors</Name>
+        <Expression>//div[preceding-sibling::span[text()="Floors"]]</Expression>
+        <Type>XPath</Type>
+      </Selector>
+      <Selector>
+        <Name>Apn</Name>
+        <Expression>//div[preceding-sibling::span[text()="APN"]]</Expression>
+        <Type>XPath</Type>
+      </Selector>
+    </SubSelectors>
+  </Selector>
+  <Selector>
+    <Type>ClassName</Type>
+    <Expression>schools-content</Expression>
+    <SubSelectors>
+      <Selector>
+        <Name>ElementarySchool</Name>
+        <Expression>//div[following-sibling::div[child::a[contains(text(), "Elementary School")]]]</Expression>
+        <Type>XPath</Type>
+      </Selector>
+      <Selector>
+        <Name>MiddleSchool</Name>
+        <Expression>//div[following-sibling::div[child::a[contains(text(), "Middle School")]]]</Expression>
+        <Type>XPath</Type>
+      </Selector>
+      <Selector>
+        <Name>HighSchool</Name>
+        <Expression>//div[following-sibling::div[child::a[contains(text(), "High School")]]]</Expression>
+        <Type>XPath</Type>
+      </Selector>
+    </SubSelectors>
+  </Selector>
+</ArrayOfSelector>

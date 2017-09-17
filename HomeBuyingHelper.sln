@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.8
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeBuyingHelper", "HomeBuyingHelper\HomeBuyingHelper.csproj", "{C8C46047-A80C-43BC-830E-22D1D46B9554}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebScraper", "WebScraper\WebScraper.csproj", "{208F6B1C-5C58-4A51-A4E4-FF7B4163FBC1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HousingBuyingHelper", "HousingBuyingHelper\HousingBuyingHelper.csproj", "{0C774593-2B1A-41BE-8F11-E4D8A8743A80}"
@@ -15,10 +13,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C8C46047-A80C-43BC-830E-22D1D46B9554}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C8C46047-A80C-43BC-830E-22D1D46B9554}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C8C46047-A80C-43BC-830E-22D1D46B9554}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C8C46047-A80C-43BC-830E-22D1D46B9554}.Release|Any CPU.Build.0 = Release|Any CPU
 		{208F6B1C-5C58-4A51-A4E4-FF7B4163FBC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{208F6B1C-5C58-4A51-A4E4-FF7B4163FBC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{208F6B1C-5C58-4A51-A4E4-FF7B4163FBC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
