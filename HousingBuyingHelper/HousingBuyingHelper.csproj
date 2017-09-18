@@ -48,11 +48,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RefinApi\Coordinate.cs" />
-    <Compile Include="RefinApi\CoordinateValue.cs" />
-    <Compile Include="RefinApi\Home.cs" />
-    <Compile Include="RefinApi\Payload.cs" />
-    <Compile Include="RefinApi\RedfinApiResponse.cs" />
+    <Compile Include="RedfinApi\Coordinate.cs" />
+    <Compile Include="RedfinApi\CoordinateValue.cs" />
+    <Compile Include="RedfinApi\Home.cs" />
+    <Compile Include="RedfinApi\Payload.cs" />
+    <Compile Include="RedfinApi\RedfinApiResponse.cs" />
     <Compile Include="RouteCalculator.cs" />
     <Compile Include="Extension\ObjectExtension.cs" />
     <Compile Include="PageListScraper.cs" />

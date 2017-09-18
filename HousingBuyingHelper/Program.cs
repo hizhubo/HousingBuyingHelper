@@ -22,7 +22,7 @@ namespace HousingBuyingHelper
             var webScraper = new SinglePageScraper();
             var singlePageUrl = "https://www.redfin.com/CA/San-Jose/127-Herlong-Ave-95123/home/1287770";
             var selectors = new List<Selector> { new Selector { Name = "Url", Value = singlePageUrl } };
-            var webScraperConfig = GetSelectors(webScraperContent, selectors);
+            var webScraperConfig = GetSelectorRow(webScraperContent, selectors);
             webScraper.Scrape(singlePageUrl, webScraperConfig);
 
             var rowValues = new List<string>();
@@ -35,31 +35,68 @@ namespace HousingBuyingHelper
             var homesFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"Homes_{DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss")}.csv");
             var webScraperContent = File.ReadAllText("WebScraperConfig.xml");
             OutputCsvHeader(homesFilePath, webScraperContent);
-            var singlePageSelectorGroups = GetSelectorGroups();
+            var singlePageSelectorGroups = GetSelectorRows();
             var webScraper = new SinglePageScraper();
 
             foreach (var singlePageSelectors in singlePageSelectorGroups)
             {
                 var url = singlePageSelectors.First(s => s.Name == "Url").Value;
-                var webScraperConfig = GetSelectors(webScraperContent, singlePageSelectors);
-                webScraper.Scrape(url, webScraperConfig);
-                GetRoute(webScraperConfig);
-                Output(webScraperConfig, homesFilePath);
+                var selectorRow = GetSelectorRow(webScraperContent, singlePageSelectors);
+                webScraper.Scrape(url, selectorRow);
+                GetRoute(selectorRow);
+                Output(selectorRow, homesFilePath);
             }
         }
 
-        private static void GetRoute(List<Selector> webScraperConfig)
+        private static void OutputCsvHeader(string homesFilePath, string webScraperContent)
+        {
+            var webScraperConfig = GetSelectorRow(webScraperContent, null);
+            var names = new List<string>();
+            GenerateCsvHeader(webScraperConfig, names);
+            File.WriteAllText(homesFilePath, string.Join(",", names));
+        }
+
+        private static List<Selector> GetSelectorRow(string webScraperContent, List<Selector> selectors)
+        {
+            var webScraperConfig = webScraperContent.Deserialize<Selector[]>().ToList();
+            webScraperConfig.Add(selectors == null ? new Selector { Name = "Latitude" } : selectors.First(s => s.Name == "Latitude"));
+            webScraperConfig.Add(selectors == null ? new Selector { Name = "Longitude" } : selectors.First(s => s.Name == "Longitude"));
+            webScraperConfig.Add(new Selector { Name = "Distance to Keysight (mi)" });
+            webScraperConfig.Add(new Selector { Name = "Distance to Intel (mi)" });
+            webScraperConfig.Add(new Selector { Name = "Duration to Keysight (min)" });
+            webScraperConfig.Add(new Selector { Name = "Duration to Intel (min)" });
+            webScraperConfig.Add(selectors == null ? new Selector { Name = "Url" } : selectors.First(s => s.Name == "Url"));
+
+            return webScraperConfig;
+        }
+
+        static void GenerateCsvHeader(List<Selector> selectors, List<string> names)
+        {
+            foreach (var selector in selectors)
+            {
+                if (!string.IsNullOrWhiteSpace(selector.Name))
+                {
+                    names.Add(selector.Name);
+                }
+
+                if (selector.SubSelectors != null && selector.SubSelectors.Count > 0)
+                {
+                    GenerateCsvHeader(selector.SubSelectors, names);
+                }
+            }
+        }
+
+        private static void GetRoute(List<Selector> selectorRow)
         {
             try
             {
                 var routeCalculator = new RouteCalculator();
-                var latitudeSelector = webScraperConfig.First(s => s.Name == "Latitude");
-                var LongitudeSelector = webScraperConfig.First(s => s.Name == "Longitude");
-
-                var distanceToKeysight = webScraperConfig.First(s => s.Name == "Distance to Keysight (mi)");
-                var distanceToIntel = webScraperConfig.First(s => s.Name == "Distance to Intel (mi)");
-                var durationToKeysight = webScraperConfig.First(s => s.Name == "Duration to Keysight (min)");
-                var durationToIntel = webScraperConfig.First(s => s.Name == "Duration to Intel (min)");
+                var latitudeSelector = selectorRow.First(s => s.Name == "Latitude");
+                var LongitudeSelector = selectorRow.First(s => s.Name == "Longitude");
+                var distanceToKeysight = selectorRow.First(s => s.Name == "Distance to Keysight (mi)");
+                var distanceToIntel = selectorRow.First(s => s.Name == "Distance to Intel (mi)");
+                var durationToKeysight = selectorRow.First(s => s.Name == "Duration to Keysight (min)");
+                var durationToIntel = selectorRow.First(s => s.Name == "Duration to Intel (min)");
                 var origin = $"{latitudeSelector.Value},{LongitudeSelector.Value}";
 
                 var routeToKeysight = routeCalculator.GetRoute(origin, "5301 Stevens Creek Blvd, Santa Clara");
@@ -84,29 +121,7 @@ namespace HousingBuyingHelper
             }
         }
 
-        private static void OutputCsvHeader(string homesFilePath, string webScraperContent)
-        {
-            var webScraperConfig = GetSelectors(webScraperContent, null);
-            var names = new List<string>();
-            GenerateCsvHeader(webScraperConfig, names);
-            File.WriteAllText(homesFilePath, string.Join(",", names));
-        }
-
-        private static List<Selector> GetSelectors(string webScraperContent, List<Selector> selectors)
-        {
-            var webScraperConfig = webScraperContent.Deserialize<Selector[]>().ToList();
-            webScraperConfig.Add(selectors == null ? new Selector { Name = "Latitude" } : selectors.FirstOrDefault(s => s.Name == "Latitude"));
-            webScraperConfig.Add(selectors == null ? new Selector { Name = "Longitude" } : selectors.First(s => s.Name == "Longitude"));
-            webScraperConfig.Add(new Selector { Name = "Distance to Keysight (mi)" });
-            webScraperConfig.Add(new Selector { Name = "Distance to Intel (mi)" });
-            webScraperConfig.Add(new Selector { Name = "Duration to Keysight (min)" });
-            webScraperConfig.Add(new Selector { Name = "Duration to Intel (min)" });
-            webScraperConfig.Add(selectors == null ? new Selector { Name = "Url" } : selectors.First(s => s.Name == "Url"));
-
-            return webScraperConfig;
-        }
-
-        private static List<List<Selector>> GetSelectorGroups()
+        private static List<List<Selector>> GetSelectorRows()
         {
             var selectorGroups = new List<List<Selector>>();
             var pageListScraper = new PageListScraper();
@@ -120,22 +135,6 @@ namespace HousingBuyingHelper
             selectorGroups.AddRange(pageListScraper.Scrape("https://www.redfin.com/city/12204/CA/Milpitas"));
 
             return selectorGroups;
-        }
-
-        static void GenerateCsvHeader(List<Selector> selectors, List<string> names)
-        {
-            foreach (var selector in selectors)
-            {
-                if (!string.IsNullOrWhiteSpace(selector.Name))
-                {
-                    names.Add(selector.Name);
-                }
-
-                if (selector.SubSelectors != null && selector.SubSelectors.Count > 0)
-                {
-                    GenerateCsvHeader(selector.SubSelectors, names);
-                }
-            }
         }
 
         static void Output(List<Selector> selectors, string filePath)

@@ -1,4 +1,4 @@
-﻿using HousingBuyingHelper.RefinApi;
+﻿using HousingBuyingHelper.RedfinApi;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Net;
@@ -12,9 +12,9 @@ namespace HousingBuyingHelper
         public List<List<Selector>> Scrape(string url)
         {
             string apiUrl = this.GetApiUrl(url);
-            var selectorGroups = this.GetSelectorGroups(apiUrl);
+            var selectorRows = this.GetSelectorRows(apiUrl);
 
-            return selectorGroups;
+            return selectorRows;
         }
 
         private string GetApiUrl(string url)
@@ -27,26 +27,24 @@ namespace HousingBuyingHelper
             return apiUrl;
         }
 
-        private List<List<Selector>> GetSelectorGroups(string apiUrl)
+        private List<List<Selector>> GetSelectorRows(string apiUrl)
         {
             var apiResponseContent = this.GetPageContent(apiUrl);
-            apiResponseContent = apiResponseContent.Replace("{}&&", string.Empty);
-            apiResponseContent = apiResponseContent.Replace("鈥?,", "\",");
-            apiResponseContent = apiResponseContent.Replace("鈥", string.Empty);
+            apiResponseContent = PreProcessApiResponseContent(apiResponseContent);
             var apiResponse = JsonConvert.DeserializeObject<RedfinApiResponse>(apiResponseContent);
 
-            var selectorGroups = new List<List<Selector>>();
+            var selectorRows = new List<List<Selector>>();
 
             foreach (var home in apiResponse.payload.homes)
             {
-                var selectors = new List<Selector>();
-                selectors.Add(new Selector { Name = "Url", Value = $"https://www.redfin.com{home.url}" });
-                selectors.Add(new Selector { Name = "Latitude", Value = home.latLong.value.latitude });
-                selectors.Add(new Selector { Name = "Longitude", Value = home.latLong.value.longitude });
-                selectorGroups.Add(selectors);
+                var selectorRow = new List<Selector>();
+                selectorRow.Add(new Selector { Name = "Url", Value = $"https://www.redfin.com{home.url}" });
+                selectorRow.Add(new Selector { Name = "Latitude", Value = home.latLong.value.latitude });
+                selectorRow.Add(new Selector { Name = "Longitude", Value = home.latLong.value.longitude });
+                selectorRows.Add(selectorRow);
             }
 
-            return selectorGroups;
+            return selectorRows;
         }
 
         private string GetPageContent(string url)
@@ -56,6 +54,14 @@ namespace HousingBuyingHelper
             var pageContent = wc.DownloadString(url);
 
             return pageContent;
+        }
+
+        private static string PreProcessApiResponseContent(string apiResponseContent)
+        {
+            apiResponseContent = apiResponseContent.Replace("{}&&", string.Empty);
+            apiResponseContent = apiResponseContent.Replace("鈥?,", "\",");
+            apiResponseContent = apiResponseContent.Replace("鈥", string.Empty);
+            return apiResponseContent;
         }
     }
 }

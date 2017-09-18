@@ -1,4 +1,4 @@
-﻿namespace HousingBuyingHelper.RefinApi
+﻿namespace HousingBuyingHelper.RedfinApi
 {
     public class CoordinateValue
     {
