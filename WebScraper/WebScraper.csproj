@@ -47,7 +47,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PageListScraper.cs" />
     <Compile Include="Selector.cs" />
     <Compile Include="SelectorType.cs" />
     <Compile Include="SinglePageScraper.cs" />

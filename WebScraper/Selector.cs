@@ -1,8 +1,10 @@
-﻿namespace WebScraper
+﻿using System.Collections.Generic;
+
+namespace WebScraper
 {
     public class Selector
     {
-        public Selector[] SubSelectors { get; set; }
+        public List<Selector> SubSelectors { get; set; }
 
         public string Name { get; set; }
 

@@ -1,12 +1,13 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.IE;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace WebScraper
 {
     public class SinglePageScraper
     {
-        public void Scrape(string url, Selector[] selectors)
+        public void Scrape(string url, List<Selector> selectors)
         {
             using (var webDriver = new InternetExplorerDriver())
             {
@@ -25,6 +26,16 @@ namespace WebScraper
 
         private void ScrapeWebElement(IWebElement webElement, Selector selector)
         {
+            if (!string.IsNullOrWhiteSpace(selector.Value))
+            {
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(selector.Expression))
+            {
+                return;
+            }
+
             try
             {
                 webElement = this.FindWebElement(webElement, selector);
@@ -46,7 +57,7 @@ namespace WebScraper
                 selector.Value = new Regex(selector.Regex).Match(selector.Value).Groups["Value"].Value;
             }
 
-            if (selector.SubSelectors != null && selector.SubSelectors.Length > 0)
+            if (selector.SubSelectors != null && selector.SubSelectors.Count > 0)
             {
                 foreach (var subSelector in selector.SubSelectors)
                 {

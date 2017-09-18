@@ -6,6 +6,22 @@
     <Type>ClassName</Type>
   </Selector>
   <Selector>
+    <Name>City</Name>
+    <Expression>locality</Expression>
+    <Type>ClassName</Type>
+    <Regex>(?&lt;Value&gt;.*?),</Regex>
+  </Selector>
+  <Selector>
+    <Name>State</Name>
+    <Expression>region</Expression>
+    <Type>ClassName</Type>
+  </Selector>
+  <Selector>
+    <Name>Post</Name>
+    <Expression>postal-code</Expression>
+    <Type>ClassName</Type>
+  </Selector>
+  <Selector>
     <Type>ClassName</Type>
     <Expression>keyDetailsList</Expression>
     <SubSelectors>
@@ -15,7 +31,7 @@
         <Type>XPath</Type>
       </Selector>
       <Selector>
-        <Name>City</Name>
+        <Name>Community</Name>
         <Expression>//span[preceding-sibling::span[text()="Community"]]</Expression>
         <Type>XPath</Type>
       </Selector>
